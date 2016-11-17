@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+    <script src = "js/Three.js_Core/three.min.js"></script>
+    <script>
+        var balls = [], camera, controls, renderer, scene;
+        var dx = dy = dz = 0.3, radius = 4, threeD = 1;
+
+        function add_scene() {
+            var mat = new THREE.MeshFaceMaterial( [
+                new THREE.MeshBasicMaterial( { color: "aqua", wireframe: true } ),
+                new THREE.MeshBasicMaterial( { color: "yellow", wireframe: true } ),
+                new THREE.MeshBasicMaterial( { color: "white", wireframe: true } ),
+                new THREE.MeshBasicMaterial( { color: "magenta", wireframe: true } ),
+                new THREE.MeshBasicMaterial( { color: "gray", wireframe: true } ),
+                new THREE.MeshBasicMaterial( { color: "red", wireframe: true } )
+            ]);
+            var geo = new THREE.CubeGeometry(50, 50, 50, 20, 20, 20);
+            var cube = new THREE.Mesh(geo, mat);
+            scene.add(cube);
+
+            for (var i = 0; i < 10; i++) {
+                var ball = {};
+
+                var geo2 = new THREE.SphereGeometry(radius, 12, 12);
+                var mat2 = new THREE.MeshPhongMaterial({ color: "blue" });
+                var mat2 = new THREE.MeshNormalMaterial();
+                ball.obj = new THREE.Mesh(geo2, mat2);
+
+                ball.x = 0; ball.y = 0; ball.z = 0;
+                ball.obj.position.set(ball.x, 0, ball.z);
+                ball.dx = Math.random() * 0.6 - 0.3;
+                ball.dy = Math.random() * 0.6 - 0.3;
+                ball.dz = Math.random() * 0.6 - 0.3;
+                ball.dy = Math.random() * 0.6 - 0.3;
+
+                scene.add(ball.obj);
+                balls.push(ball);
+            }
+
+        }
+
+        init();
+        animate();
+
+        function init() {
+            canv = document.getElementById("myCan");
+            renderer = new THREE.WebGLRenderer({ canvas: canv});
+
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(75, canv.width/canv.height, 0.1, 1000);
+            camera.position.set(0, 0, 60);
+
+            var light = new THREE.PointLight(0xffffff);
+            light.position.set(0, 0, 60);
+            scene.add(light);
+
+            add_scene();
+            draw();
+        }
+
+        function draw() {
+            balls_update();
+            renderer.render(scene, camera);
+            requestAnimationFrame(draw);
+        }
+
+        function balls_update() {
+            for (var i = 0; i < balls.length; i++) {
+                var ball = balls[i];
+
+                ball.x += ball.dx;
+                ball.y += ball.dy;
+                ball.z += ball.dz;
+
+                var canw = canv.width/20, canh = canv.height/20, canz = 50/2;
+                if (ball.x > (canw - radius) || ball.x < (-canw + radius))
+                    ball.dx *= -1;
+                if (ball.y > (canh - radius) || ball.y < (-canh + radius))
+                    ball.dy *= -1;
+                if (ball.z > (canz - radius) || ball.z < (-canz + radius))
+                    ball.dz *= -1;
+
+                ball.obj.position.set(ball.x, ball.y, ball.z);
+            }
+        }
+    </script>
+</head>
+<body onload="init()">
+<div>
+    <canvas width=500 height=500 id="myCan" style="background:black"></canvas>
+</div>
+</body>
+</html>
