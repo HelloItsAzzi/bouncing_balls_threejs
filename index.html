@@ -7,6 +7,7 @@
         var dx = dy = dz = 0.3, radius = 4, threeD = 1;
 
         function add_scene() {
+            // Frame making
             var mat = new THREE.MeshFaceMaterial( [
                 new THREE.MeshBasicMaterial( { color: "aqua", wireframe: true } ),
                 new THREE.MeshBasicMaterial( { color: "yellow", wireframe: true } ),
@@ -19,6 +20,7 @@
             var cube = new THREE.Mesh(geo, mat);
             scene.add(cube);
 
+            // Creating balls
             for (var i = 0; i < 10; i++) {
                 var ball = {};
 
@@ -29,6 +31,8 @@
 
                 ball.x = 0; ball.y = 0; ball.z = 0;
                 ball.obj.position.set(ball.x, 0, ball.z);
+
+                // Setting each ball's speed
                 ball.dx = Math.random() * 0.6 - 0.3;
                 ball.dy = Math.random() * 0.6 - 0.3;
                 ball.dz = Math.random() * 0.6 - 0.3;
@@ -69,10 +73,12 @@
             for (var i = 0; i < balls.length; i++) {
                 var ball = balls[i];
 
+                // Ball movement
                 ball.x += ball.dx;
                 ball.y += ball.dy;
                 ball.z += ball.dz;
 
+                // Ball collision with the frame
                 var canw = canv.width/20, canh = canv.height/20, canz = 50/2;
                 if (ball.x > (canw - radius) || ball.x < (-canw + radius))
                     ball.dx *= -1;
